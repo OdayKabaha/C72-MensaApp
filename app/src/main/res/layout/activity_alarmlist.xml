@@ -4,27 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SpeisePlan">
+    tools:context=".Alarmlist">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:text="Speiseplan"
-        android:textColor="@color/colorPrimaryDark"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="Alarmlist"
         android:textSize="30sp"
-        tools:layout_editor_absoluteX="132dp"
-        tools:layout_editor_absoluteY="266dp" />
+        tools:layout_editor_absoluteX="101dp"
+        tools:layout_editor_absoluteY="16dp" />
 
     <Button
-        android:id="@+id/btnGraph"
+        android:id="@+id/backAlarmlist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="37dp"
-        android:layout_marginTop="32dp"
-        android:text="Button" />
+        android:text="Zurück"
+        android:drawableLeft="@drawable/ic_arrow_back_black_24dp"/>
+
+
 </RelativeLayout>

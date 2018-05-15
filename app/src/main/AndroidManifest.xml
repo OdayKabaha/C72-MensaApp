@@ -17,7 +17,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".SpeisePlan" />
-        <activity android:name=".Graph"></activity>
+        <activity android:name=".Graph" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".Alarmlist" />
+        <activity android:name=".Settings"></activity>
     </application>
 
 </manifest>

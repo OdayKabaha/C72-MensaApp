@@ -15,14 +15,14 @@ public class SpeisePlan extends Activity implements View.OnClickListener {
         Button btnGraph;
         List<Meal> Speisekarte;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_speise_plan);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_speise_plan);
 
-            btnGraph = (Button) findViewById(R.id.btnGraph);
-            btnGraph.setOnClickListener(this);
-        }
+        btnGraph = (Button) findViewById(R.id.btnGraph);
+        btnGraph.setOnClickListener(this);
+    }
 
         @Override
         public void onClick(View v) {
