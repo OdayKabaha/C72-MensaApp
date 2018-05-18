@@ -42,6 +42,10 @@ public class Meal {
         return prices;
     }
 
+    public void setPrices(double[] prices) {
+        this.prices = new Prices(prices);
+    }
+
     public void setPrices(Prices prices) {
         this.prices = prices;
     }
@@ -52,5 +56,21 @@ public class Meal {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String toString(){
+        try{
+            String ret = " id: "+ this.id + "\n name: "+ this.name + "\n category: "+ this.category;
+            ret += "\n Notes \n [ ";
+            for (String s : this.notes)
+            {
+                ret += "\n \t "+s;
+            }
+            ret += "\n ]";
+            ret += "prices: \n "+this.prices.toString()+"\n";
+            return ret;
+        }
+        catch(Exception e){ return ""; }
+
     }
 }

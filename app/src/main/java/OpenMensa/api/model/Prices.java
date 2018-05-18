@@ -8,6 +8,29 @@ import java.util.Currency;
 
 public class Prices {
 
+    public Prices() {
+        this.student = 0;
+        this.employee = 0;
+        this.pupil = 0;
+        this.other = 0;
+        //this.currency = Currency.getInstance("Eur");
+    }
+    public Prices(double student, double employee, double pupil, double other){
+        this.student = student;
+        this.employee = employee;
+        this.pupil = pupil;
+        this.other = other;
+        //this.currency = Currency.getInstance("Eur");
+    }
+
+    public Prices(double[] prices){
+        this.student = prices[0];
+        this.employee = prices[1];
+        this.pupil = prices[2];
+        this.other = prices[3];
+        //this.currency = Currency.getInstance("Eur");
+    }
+
     private Currency currency;
     private double student;
     private double employee;
@@ -53,4 +76,11 @@ public class Prices {
     public void setOther(double other) {
         this.other = other;
     }
+
+    public String toString(){
+        String s = "\n[ student: "+this.student+" employee: "+this.employee;
+        s += " pupil: "+this.pupil+" other: "+this.other;
+        return s;
+    }
+
 }

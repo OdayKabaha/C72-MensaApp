@@ -6,6 +6,7 @@ package OpenMensa.api.model;
 
 public class Canteen {
 
+
     private int id;
     private String city;
     private String name;
@@ -19,6 +20,7 @@ public class Canteen {
     public String getCity() {
         return city;
     }
+
 
     public void setCity(String city) {
         this.city = city;
@@ -44,12 +46,11 @@ public class Canteen {
         this.address = address;
     }
 
-
-    public GeographicCoordinates getCoordinates() {
-        return coordinates;
+    public void setCoordinates(double[] arr) {
+        this.coordinates = new GeographicCoordinates(arr[0],arr[1]);
     }
 
-    public void setCoordinates(GeographicCoordinates coordinates) {
-        this.coordinates = coordinates;
+    public String toString(){
+        return " id: "+this.id +"\n name: "+this.name+"\n city: "+this.city+"\n adress: "+this.address+ "\n coordinates: "+this.coordinates.toString();
     }
 }

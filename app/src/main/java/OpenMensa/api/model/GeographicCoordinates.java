@@ -27,4 +27,6 @@ public class GeographicCoordinates {
     public double getLongitude() {
         return longitude;
     }
+
+    public String toString() { return "[ latitude: "+this.latitude+", longitude: "+this.longitude+"]";}
 }
