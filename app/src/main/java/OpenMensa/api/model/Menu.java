@@ -7,7 +7,16 @@ public class Menu {
 
     private LocalDate date;
     private Canteen canteen;
+    private DayStatus status;
     private List<Meal> meals;
+
+    public DayStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(DayStatus status) {
+        this.status = status;
+    }
 
     public LocalDate getDate() {
         return date;

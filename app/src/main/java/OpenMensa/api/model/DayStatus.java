@@ -10,16 +10,26 @@ import OpenMensa.api.enums.DayStatusOpen;
 
 public class DayStatus {
 
-    private LocalDate date;
     private DayStatusOpen dayStatusOpen;
 
-    public DayStatus(LocalDate date, DayStatusOpen dayStatusOpen) {
-        this.date = date;
-        this.dayStatusOpen = dayStatusOpen;
+    public boolean isOpen() {
+        return isOpen;
     }
 
-    public LocalDate getDate() {
-        return date;
+    private boolean isOpen;
+
+    public DayStatus(boolean isOpen){
+        this.isOpen = isOpen;
+        if (isOpen == true)
+            this.dayStatusOpen = DayStatusOpen.OPEN;
+        else this.dayStatusOpen = DayStatusOpen.CLOSED;
+    }
+
+    public DayStatus(DayStatusOpen dayStatusOpen) {
+        this.dayStatusOpen = dayStatusOpen;
+        if (this.dayStatusOpen == DayStatusOpen.OPEN)
+            this.isOpen = true;
+        else this.isOpen = false;
     }
 
     public DayStatusOpen getDayStatusOpen() {

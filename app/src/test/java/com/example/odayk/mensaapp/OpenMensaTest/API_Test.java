@@ -13,9 +13,11 @@ import java.util.List;
 import OpenMensa.api.OpenMensaAPI;
 import OpenMensa.api.dataprovider.OpenMensaOrg;
 import OpenMensa.api.model.Canteen;
+import OpenMensa.api.model.DayStatus;
 import OpenMensa.api.model.Meal;
 import OpenMensa.api.model.Menu;
 import OpenMensa.api.modelbuilders.CanteenJSON;
+import OpenMensa.api.modelbuilders.DayStatusJSON;
 import OpenMensa.api.modelbuilders.MealJSON;
 
 
@@ -33,7 +35,7 @@ public class API_Test {
         this.testAPI = new OpenMensaAPI();
     }
 
-    
+
 
     /** hier Oday*/
 
@@ -49,6 +51,9 @@ public class API_Test {
          try {
              Canteen htw = testAPI.getCanteenById(htw_id);
              m = testAPI.getMenuFromCanteenByDate(htw,heute);
+
+             if (m.getCanteen() != htw ) result = false;
+             if (m.getStatus().isOpen() && m.getMeals()==null) result = false;
 
              System.out.print(m.toString());
          }
@@ -160,7 +165,25 @@ public class API_Test {
         assertThat(result,is(true));
     }
 
+    @Test
+    public void test_DayStatus() throws IOException {
 
+        int htw_id = 24;
+        LocalDate heute = LocalDate.now();
+
+        boolean result = true;
+
+        try{
+            DayStatus status = testAPI.getDayStatusFromCanteenByDate(24,LocalDate.now());
+            if (status == null) result = false;
+        }
+        catch(Exception e){
+            e.fillInStackTrace();
+            result = false;
+        }
+
+        assertThat(result,is(true));
+    }
 
 
 }

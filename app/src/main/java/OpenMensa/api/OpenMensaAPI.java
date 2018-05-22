@@ -7,9 +7,11 @@ import java.util.List;
 import OpenMensa.api.dataprovider.OpenMensaDataProvider;
 import OpenMensa.api.dataprovider.OpenMensaOrg;
 import OpenMensa.api.model.Canteen;
+import OpenMensa.api.model.DayStatus;
 import OpenMensa.api.model.Meal;
 import OpenMensa.api.model.Menu;
 import OpenMensa.api.modelbuilders.CanteenJSON;
+import OpenMensa.api.modelbuilders.DayStatusJSON;
 import OpenMensa.api.modelbuilders.MealJSON;
 
 public class OpenMensaAPI {
@@ -62,6 +64,10 @@ public class OpenMensaAPI {
         menu.setCanteen(canteen);
         menu.setDate(date);
 
+        menu.setStatus(getDayStatusFromCanteenByDate(canteen, date));
+
+        if (!menu.getStatus().isOpen()) return menu;
+
         String command = "/canteens/"+canteen.getId()+"/days/"+date.toString()+"/meals";
         String json = dataProvider.queryAPI(command);
 
@@ -73,10 +79,22 @@ public class OpenMensaAPI {
         return getMenuFromCanteenByDate(getCanteenById(id),date);
     }
 
+    /**
+     * Returns a Menu object from a given canteen object and a date
+     * @param canteen
+     * @param date
+     * @return
+     */
+    public DayStatus getDayStatusFromCanteenByDate(Canteen canteen, LocalDate date) throws IOException{
+        String command = "/canteens/"+canteen.getId()+"/days/"+date.toString()+"/";
+        String json = dataProvider.queryAPI(command);
 
+        DayStatus status = DayStatusJSON.translate(json);
+        return status;
+    }
 
-
-
-
+    public DayStatus getDayStatusFromCanteenByDate(int id, LocalDate date) throws IOException{
+        return getDayStatusFromCanteenByDate(getCanteenById(id),date);
+    }
 
 }
