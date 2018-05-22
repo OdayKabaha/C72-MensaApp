@@ -2,12 +2,10 @@ package OpenMensa.api;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
 
 import OpenMensa.api.dataprovider.OpenMensaDataProvider;
 import OpenMensa.api.dataprovider.OpenMensaOrg;
 import OpenMensa.api.model.Canteen;
-import OpenMensa.api.model.Meal;
 import OpenMensa.api.model.Menu;
 import OpenMensa.api.modelbuilders.CanteenJSON;
 import OpenMensa.api.modelbuilders.MealJSON;
@@ -72,11 +70,4 @@ public class OpenMensaAPI {
     public Menu getMenuFromCanteenByDate(int id, LocalDate date) throws IOException{
         return getMenuFromCanteenByDate(getCanteenById(id),date);
     }
-
-
-
-
-
-
-
 }
