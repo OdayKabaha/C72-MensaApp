@@ -37,7 +37,8 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:27.1.1'
-    compile 'com.android.support:design:27.1.1' // Für Navigation Drawer
+    compile 'com.android.support:design:27.1.1'
+    // Für Navigation Drawer
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation 'com.fasterxml.jackson:jackson-base:2.9.5'
