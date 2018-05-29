@@ -23,7 +23,7 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme" />
         <activity android:name=".Alarmlist" />
-        <activity android:name=".Settings"></activity>
+        <activity android:name=".Settings" />
     </application>
 
 </manifest>

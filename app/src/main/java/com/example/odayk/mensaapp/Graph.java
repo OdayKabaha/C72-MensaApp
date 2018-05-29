@@ -21,19 +21,14 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Graph extends AppCompatActivity implements View.OnClickListener {
+public class Graph extends AppCompatActivity {
 
     BarChart barChart;
-
-    Button backGraph;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
-
-        backGraph = (Button) findViewById(R.id.backGraph);
-        backGraph.setOnClickListener(this);
 
         barChart = (BarChart) findViewById(R.id.barchart);
 
@@ -83,13 +78,6 @@ public class Graph extends AppCompatActivity implements View.OnClickListener {
         xAxis.setCenterAxisLabels(true);
         xAxis.setAxisMinimum(1);
 
-    }
-
-    @Override
-    public void onClick(View v) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        this.finish();
     }
 
     public class MyXAxisValueFormatter implements IAxisValueFormatter{
