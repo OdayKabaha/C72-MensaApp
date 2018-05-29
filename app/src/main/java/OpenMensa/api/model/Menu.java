@@ -1,6 +1,7 @@
 package OpenMensa.api.model;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public class Menu {
@@ -19,6 +20,7 @@ public class Menu {
     }
 
     public LocalDate getDate() {
+        Date d;
         return date;
     }
 
@@ -43,6 +45,7 @@ public class Menu {
     }
 
     public String toString(){
+
         String s = "Speiseplan für "+this.canteen.getName()+" am "+this.date.toString();
         s+="\n\n";
         for (Meal m :
@@ -50,7 +53,6 @@ public class Menu {
             s+= m.toString();
             s+= "\n";
         }
-
         return s;
     }
 

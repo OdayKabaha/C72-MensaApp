@@ -9,11 +9,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class SpeisePlan extends Activity implements View.OnClickListener {
         Button btnGraph;
         List<Meal> Speisekarte;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

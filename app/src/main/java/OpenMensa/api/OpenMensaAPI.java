@@ -6,11 +6,9 @@ import java.time.LocalDate;
 import OpenMensa.api.dataprovider.OpenMensaDataProvider;
 import OpenMensa.api.dataprovider.OpenMensaOrg;
 import OpenMensa.api.model.Canteen;
-<<<<<<< HEAD
+
 import OpenMensa.api.model.DayStatus;
 import OpenMensa.api.model.Meal;
-=======
->>>>>>> 189abde4cfc183998637dae2223c29b357b7d258
 import OpenMensa.api.model.Menu;
 import OpenMensa.api.modelbuilders.CanteenJSON;
 import OpenMensa.api.modelbuilders.DayStatusJSON;
@@ -66,11 +64,27 @@ public class OpenMensaAPI {
         menu.setCanteen(canteen);
         menu.setDate(date);
 
-        menu.setStatus(getDayStatusFromCanteenByDate(canteen, date));
+       // menu.setStatus(getDayStatusFromCanteenByDate(canteen, date));
 
-        if (!menu.getStatus().isOpen()) return menu;
+        //if (!menu.getStatus().isOpen()) return menu;
 
         String command = "/canteens/"+canteen.getId()+"/days/"+date.toString()+"/meals";
+        String json = dataProvider.queryAPI(command);
+
+        menu.setMeals(MealJSON.parse(json));
+        return menu;
+    }
+
+    public Menu temp_getMenuFromCanteenByDate(Canteen canteen, String date) throws IOException{
+        Menu menu = new Menu();
+        menu.setCanteen(canteen);
+        //menu.setDate(date);
+
+        // menu.setStatus(getDayStatusFromCanteenByDate(canteen, date));
+
+        //if (!menu.getStatus().isOpen()) return menu;
+
+        String command = "/canteens/"+canteen.getId()+"/days/"+date+"/meals";
         String json = dataProvider.queryAPI(command);
 
         menu.setMeals(MealJSON.parse(json));
@@ -80,7 +94,6 @@ public class OpenMensaAPI {
     public Menu getMenuFromCanteenByDate(int id, LocalDate date) throws IOException{
         return getMenuFromCanteenByDate(getCanteenById(id),date);
     }
-<<<<<<< HEAD
 
     /**
      * Returns a Menu object from a given canteen object and a date
@@ -100,6 +113,4 @@ public class OpenMensaAPI {
         return getDayStatusFromCanteenByDate(getCanteenById(id),date);
     }
 
-=======
->>>>>>> 189abde4cfc183998637dae2223c29b357b7d258
 }

@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Date;
 
 import OpenMensa.api.OpenMensaAPI;
 import OpenMensa.api.model.*;
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity
     public void setOpenMensaAPI(OpenMensaAPI openMensaAPI) {
         this.openMensaAPI = new OpenMensaAPI();
     }
+
+
     public Canteen printCanteen(int i) throws IOException {
        return openMensaAPI.getCanteenById(30);
        // System.out.println("gut");
@@ -86,7 +90,6 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.wilhelminenhof) {

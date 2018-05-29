@@ -6,13 +6,16 @@ package OpenMensa.api.model;
 
 import java.util.List;
 
+import OpenMensa.api.enums.MealCategory;
+import OpenMensa.api.modelbuilders.CategoryTranslator;
+
 public class Meal {
 
     private int id;
     private String name;
     private List<String> notes;
     private Prices prices;
-    private String category;
+    private MealCategory category;
 
     public int getId() {
         return id;
@@ -50,12 +53,12 @@ public class Meal {
         this.prices = prices;
     }
 
-    public String getCategory() {
+    public MealCategory getCategory() {
         return category;
     }
 
     public void setCategory(String category) {
-        this.category = category;
+        this.category = CategoryTranslator.translate(category);
     }
 
     public String toString(){
