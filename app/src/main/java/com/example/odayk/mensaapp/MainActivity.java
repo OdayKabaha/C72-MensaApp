@@ -28,21 +28,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-<<<<<<< HEAD
+
+import java.text.DateFormat;
 import java.time.LocalDate;
 import java.util.Date;
-=======
+
 import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.time.LocalDate;
->>>>>>> 537a8d7869331b6352acc215b9c0d7d149045dd4
+
 
 import OpenMensa.api.OpenMensaAPI;
+import OpenMensa.api.helpers.MealWrapper;
 import OpenMensa.api.model.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,18 +58,20 @@ public class MainActivity extends AppCompatActivity
     MyAdapter adapter;
 
 
-    private OpenMensaAPI openMensaAPI ;
-    public void createOpenMensaAPI (){
+    private OpenMensaAPI openMensaAPI;
+
+    public void createOpenMensaAPI() {
         openMensaAPI = new OpenMensaAPI();
     }
 
 
     public Canteen printCanteen(int i) throws IOException {
-       return openMensaAPI.getCanteenById(30);
-       // System.out.println("gut");
+        return openMensaAPI.getCanteenById(30);
+        // System.out.println("gut");
     }
+
     String printMealsFromHtw() throws IOException {
-       return openMensaAPI.getSomeMealsFromHTW();
+        return openMensaAPI.getSomeMealsFromHTW();
     }
 
     String CanteenClose = "Heute ist die Mensa geschlossen!";
@@ -86,12 +91,15 @@ public class MainActivity extends AppCompatActivity
 
         /****************************Implementierung von ExpandableListView*************************/
         expandableListView = (ExpandableListView) findViewById(R.id.idListView);
-        myHeader = DataProvider.getInfo();
+        //myHeader = DataProvider.getInfo();
+        // spaeter, wenn gebraucht
+        DataProvider.getTodaysMenu();
+        DataProvider.init();
+
         myChild = new ArrayList<>(myHeader.keySet());
         adapter = new MyAdapter(this, myHeader, myChild);
         expandableListView.setAdapter(adapter);
         /********************************************************************************************/
-
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -132,34 +140,34 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         final int id = item.getItemId();
 
-<<<<<<< HEAD
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.wilhelminenhof) {
             try {
-                setOpenMensaAPI(openMensaAPI);
                 Canteen canteen24 = openMensaAPI.getCanteenById(24);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-           // Toast.makeText(this, "Wilhelminenhof Mensa ausgewählt", Toast.LENGTH_SHORT).show();
-        }else if (id == R.id.treskowalle) {
+            // Toast.makeText(this, "Wilhelminenhof Mensa ausgewählt", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.treskowalle) {
             try {
                 Canteen canteen30 = openMensaAPI.getCanteenById(30);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-         //   Toast.makeText(this, "Treskowalle Mensa ausgewählt", Toast.LENGTH_SHORT).show();
+            //   Toast.makeText(this, "Treskowalle Mensa ausgewählt", Toast.LENGTH_SHORT).show();
         }
-=======
-        //final LocalDate localDate = LocalDate.now();
+
+        final LocalDate localDate = LocalDate.now();
+        Date date = new Date();
+//        int h = date.getHours();
+
+        DateFormat f = new SimpleDateFormat("dd . MM . yyyy");
+
+        String currentTime = f.format(date);
+
         // LocalDate localDate = LocalDate.of(2018, 05, 27);
 
-/*      Calendar kalender = Calendar.getInstance();
-        SimpleDateFormat datumsformat = new SimpleDateFormat("dd.MM.yyyy");
-        datumsformat.format(kalender.getTime());
-        System.out.print(datumsformat);*/
-
->>>>>>> 537a8d7869331b6352acc215b9c0d7d149045dd4
 
         new Thread(new Runnable() {
             @Override
@@ -171,7 +179,7 @@ public class MainActivity extends AppCompatActivity
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else if (id == R.id.treskowalle) {
+                } else if (id == R.id.treskowalle) {
                     try {
                         Canteen canteen30 = openMensaAPI.getCanteenById(30);
                     } catch (IOException e) {
@@ -182,8 +190,8 @@ public class MainActivity extends AppCompatActivity
         });
         return super.onOptionsItemSelected(item);
 
-    //   Toast.makeText(this, "Wilhelminenhof Mensa ausgewählt", Toast.LENGTH_SHORT).show();
-    //  Toast.makeText(this, "Treskowalle Mensa ausgewählt", Toast.LENGTH_SHORT).show();
+        //   Toast.makeText(this, "Wilhelminenhof Mensa ausgewählt", Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(this, "Treskowalle Mensa ausgewählt", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -221,8 +229,7 @@ public class MainActivity extends AppCompatActivity
         });
          */
 
-        //****************************************************************//
-
+    //****************************************************************//
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -232,16 +239,16 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_first_layout) {
-            Log.d(TAG,"first selected");
-            Log.d(TAG,"third selected");
+            Log.d(TAG, "first selected");
+            Log.d(TAG, "third selected");
             Intent intent = new Intent(this, Alarmlist.class);
             startActivity(intent);
         } else if (id == R.id.nav_second_layout) {
-            Log.d(TAG,"second selected");
+            Log.d(TAG, "second selected");
             Intent intent = new Intent(this, Graph.class);
             startActivity(intent);
         } else if (id == R.id.nav_third_layout) {
-            Log.d(TAG,"third selected");
+            Log.d(TAG, "third selected");
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
         } else if (id == R.id.nav_send) {
@@ -252,78 +259,129 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-}
 
-/**********************************Implementierung von ExpndableListView***************************************/
-class MyAdapter extends BaseExpandableListAdapter{
-    private Context ctx;
-    private HashMap<String, List<String>> ChildTitles;
-    private List<String> HeaderTitles;
 
-    MyAdapter(Context ctx, HashMap<String, List<String>> ChildTitles, List<String> HeaderTitles){
-        this.ctx = ctx;
-        this.ChildTitles = ChildTitles;
-        this.HeaderTitles = HeaderTitles;
-    }
-    @Override
-    public int getGroupCount(){
-        return HeaderTitles.size();
-    }
-    @Override
-    public int getChildrenCount(int groupPosition){
-        return ChildTitles.get(HeaderTitles.get(groupPosition)).size();
-    }
-    @Override
-    public Object getGroup(int groupPosition){
-        return HeaderTitles.get(groupPosition);
-    }
-    @Override
-    public Object getChild(int groupPosition, int childPosition){
-        return ChildTitles.get(HeaderTitles.get(groupPosition)).get(childPosition);
-    }
-    @Override
-    public long getGroupId(int groupPosition){
-        return groupPosition;
-    }
-    @Override
-    public long getChildId(int groupPosition, int childPosition){
-        return groupPosition;
-    }
-    @Override
-    public boolean hasStableIds(){
-        return false;
-    }
-    @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent){
-        String title = (String) this.getGroup(groupPosition);
-        if(convertView == null){
-            LayoutInflater inflater = (LayoutInflater) this.ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.custom_header, null);
+    /**********************************Implementierung von ExpndableListView***************************************/
+    class  MyAdapter extends BaseExpandableListAdapter {
+        private Context ctx;
+        private HashMap<String, List<String>> ChildTitles;
+        private List<String> HeaderTitles;
+
+        MyAdapter(Context ctx, HashMap<String, List<String>> ChildTitles, List<String> HeaderTitles) {
+            this.ctx = ctx;
+            this.ChildTitles = ChildTitles;
+            this.HeaderTitles = HeaderTitles;
         }
-        TextView txt = (TextView) convertView.findViewById(R.id.idTitle);
-        txt.setTypeface(null, Typeface.BOLD);
-        txt.setText(title);
-        return convertView;
-    }
-    @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent){
-        String title = (String) this.getChild(groupPosition, childPosition);
-        if (convertView == null){
-            LayoutInflater inflater = (LayoutInflater) this.ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.custom_childitems,null);
+
+        @Override
+        public int getGroupCount() {
+            return HeaderTitles.size();
         }
-        TextView txt = (TextView) convertView.findViewById(R.id.idChild);
-        txt.setText(title);
-        return convertView;
+
+        @Override
+        public int getChildrenCount(int groupPosition) {
+            return ChildTitles.get(HeaderTitles.get(groupPosition)).size();
+        }
+
+        @Override
+        public Object getGroup(int groupPosition) {
+            return HeaderTitles.get(groupPosition);
+        }
+
+        @Override
+        public Object getChild(int groupPosition, int childPosition) {
+            return ChildTitles.get(HeaderTitles.get(groupPosition)).get(childPosition);
+        }
+
+        @Override
+        public long getGroupId(int groupPosition) {
+            return groupPosition;
+        }
+
+        @Override
+        public long getChildId(int groupPosition, int childPosition) {
+            return groupPosition;
+        }
+
+        @Override
+        public boolean hasStableIds() {
+            return false;
+        }
+
+        @Override
+        public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+            String title = (String) this.getGroup(groupPosition);
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) this.ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.custom_header, null);
+            }
+            TextView txt = (TextView) convertView.findViewById(R.id.idTitle);
+            txt.setTypeface(null, Typeface.BOLD);
+            txt.setText(title);
+            return convertView;
+        }
+
+        @Override
+        public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+            String title = (String) this.getChild(groupPosition, childPosition);
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater) this.ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.custom_childitems, null);
+            }
+            TextView txt = (TextView) convertView.findViewById(R.id.idChild);
+            txt.setText(title);
+            return convertView;
+        }
+
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition) {
+            return true;
+        }
     }
 
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
-    }
-}
-class DataProvider{
-    public static HashMap<String, List<String>> getInfo(){
+   static class DataProvider {
+
+        public static OpenMensa.api.model.Menu getTodaysMenu(){
+          if (todayMenuList.isEmpty())  return null; else return todayMenuList.get(0);
+        }
+
+        private final static List<OpenMensa.api.model.Menu> todayMenuList = new ArrayList<OpenMensa.api.model.Menu>();
+
+        public static void init(){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    OpenMensaAPI api = new OpenMensaAPI();
+                    try {
+                        OpenMensa.api.model.Menu todaysMenu  = api.temp_getMenuFromCanteenByDate(api.getCanteenById(24),"29-05-2018");
+                        todayMenuList.add(todaysMenu);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        }
+
+
+      /*  public static HashMap<String, List<String>> getInfo() {
+
+            final OpenMensa.api.model.Menu todaysMenu;
+
+          new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        OpenMensaAPI api = new OpenMensaAPI();
+                        try {
+                            todaysMenu  = api.temp_getMenuFromCanteenByDate(api.getCanteenById(24),"29-05-2018");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+          });*/
+
+ //       MealWrapper today = new MealWrapper(todaysMenu);
+ //       return today.getMealMap();
+/*
         HashMap<String, List<String>> HeaderDetails = new HashMap<String, List<String>>();
         List<String> ChildDetails1 = new ArrayList<>();
         ChildDetails1.add("This is Children 11");
@@ -368,6 +426,8 @@ class DataProvider{
         HeaderDetails.put("Header 5", ChildDetails5);
         HeaderDetails.put("Header 6", ChildDetails6);
 
-        return HeaderDetails;
-    }
+        return HeaderDetails;*/
+            //   }
+        }
+
 }

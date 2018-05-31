@@ -2,8 +2,10 @@ package com.example.odayk.mensaapp;
 
 import org.junit.Test;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -22,11 +24,20 @@ public class ExampleUnitTest {
 
     @Test
     public void test(){
-        Calendar kalender = Calendar.getInstance();
+        Date date = new Date();
+//        int h = date.getHours();
+
+        DateFormat f = new SimpleDateFormat("dd.MM.yyyy");
+
+        String currentTime =  f.format(date);
+        System.out.println(currentTime);
+        System.out.println("@Hello");
+
+      /*  Calendar kalender = Calendar.getInstance();
         SimpleDateFormat datumsformat = new SimpleDateFormat("dd.MM.yyyy");
         datumsformat.format(kalender.getTime());
 
         System.out.println(datumsformat);
-        System.out.println("@Hello");
+        System.out.println("@Hello");*/
     }
 }

@@ -6,17 +6,14 @@ import java.time.LocalDate;
 import OpenMensa.api.dataprovider.OpenMensaDataProvider;
 import OpenMensa.api.dataprovider.OpenMensaOrg;
 import OpenMensa.api.model.Canteen;
-<<<<<<< HEAD
+
 
 import OpenMensa.api.model.DayStatus;
 import OpenMensa.api.model.Meal;
-=======
-//<<<<<<< HEAD
+
 import OpenMensa.api.model.DayStatus;
 import OpenMensa.api.model.Meal;
-//=======
-//>>>>>>> 189abde4cfc183998637dae2223c29b357b7d258
->>>>>>> 537a8d7869331b6352acc215b9c0d7d149045dd4
+
 import OpenMensa.api.model.Menu;
 import OpenMensa.api.modelbuilders.CanteenJSON;
 import OpenMensa.api.modelbuilders.DayStatusJSON;
@@ -102,10 +99,7 @@ public class OpenMensaAPI {
     public Menu getMenuFromCanteenByDate(int id, LocalDate date) throws IOException{
         return getMenuFromCanteenByDate(getCanteenById(id),date);
     }
-<<<<<<< HEAD
-=======
-//<<<<<<< HEAD
->>>>>>> 537a8d7869331b6352acc215b9c0d7d149045dd4
+
 
     /**
      * Returns a Menu object from a given canteen object and a date
@@ -125,9 +119,4 @@ public class OpenMensaAPI {
         return getDayStatusFromCanteenByDate(getCanteenById(id),date);
     }
 
-<<<<<<< HEAD
-=======
-//=======
-//>>>>>>> 189abde4cfc183998637dae2223c29b357b7d258
->>>>>>> 537a8d7869331b6352acc215b9c0d7d149045dd4
 }
