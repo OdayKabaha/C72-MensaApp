@@ -15,4 +15,5 @@ public class Alarmlist extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarmlist);
     }
+    /*Oday Oday Oday Oday Oday Oday*/
 }
