@@ -22,7 +22,7 @@ public class ExampleUnitTest {
     }
 
 
-    @Test
+/*    @Test
     public void test(){
         Date date = new Date();
 //        int h = date.getHours();
@@ -39,5 +39,5 @@ public class ExampleUnitTest {
 
         System.out.println(datumsformat);
         System.out.println("@Hello");*/
-    }
+//    }
 }
