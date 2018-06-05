@@ -64,7 +64,7 @@ public class OpenMensaAPI {
      * @param date
      * @return
      */
-    public Menu getMenuFromCanteenByDate(Canteen canteen, LocalDate date) throws IOException{
+    public Menu getMenuFromCanteenByDate(Canteen canteen, String date) throws IOException{ // String date statt Localdate lokaldate
         Menu menu = new Menu();
         menu.setCanteen(canteen);
         menu.setDate(date);
@@ -96,7 +96,7 @@ public class OpenMensaAPI {
         return menu;
     }
 
-    public Menu getMenuFromCanteenByDate(int id, LocalDate date) throws IOException{
+    public Menu getMenuFromCanteenByDate(int id, String date) throws IOException{
         return getMenuFromCanteenByDate(getCanteenById(id),date);
     }
 
@@ -107,7 +107,7 @@ public class OpenMensaAPI {
      * @param date
      * @return
      */
-    public DayStatus getDayStatusFromCanteenByDate(Canteen canteen, LocalDate date) throws IOException{
+    public DayStatus getDayStatusFromCanteenByDate(Canteen canteen, String date) throws IOException{ // String date statt Localdate lokaldate
         String command = "/canteens/"+canteen.getId()+"/days/"+date.toString()+"/";
         String json = dataProvider.queryAPI(command);
 
@@ -115,7 +115,7 @@ public class OpenMensaAPI {
         return status;
     }
 
-    public DayStatus getDayStatusFromCanteenByDate(int id, LocalDate date) throws IOException{
+    public DayStatus getDayStatusFromCanteenByDate(int id, String date) throws IOException{ // String date statt Localdate lokaldate
         return getDayStatusFromCanteenByDate(getCanteenById(id),date);
     }
 

@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -82,7 +83,7 @@ public class API_Test {
     /**
      * hier Oday
      */
-
+/*
     @Test
     public void test_MenuVonHeute() throws IOException {
         int htw_id = 24;
@@ -103,7 +104,7 @@ public class API_Test {
             result = false;
         }
         assertThat(result, is(true));
-    }
+    }*/
 
 
     // tests if the canteen list can be downloaded
@@ -202,7 +203,7 @@ public class API_Test {
         }
         assertThat(result, is(true));
     }
-
+/*
     @Test
     public void test_DayStatus() throws IOException {
 
@@ -220,6 +221,44 @@ public class API_Test {
         }
 
         assertThat(result, is(true));
+    }*/
+@Test
+    public void testMenu() throws IOException {
+    OpenMensaAPI openMensaAPI = new OpenMensaAPI();
+    Date date = new Date();
+    DateFormat dateFormat = new SimpleDateFormat("dd . MM . yyyy");
+    String currentDate = dateFormat.format(date);
+
+    Menu result = openMensaAPI.getMenuFromCanteenByDate(24,currentDate);
+
+    assertThat(result, notNullValue());
+}
+
+
+
+    @Test
+    public void testMenu2() {
+        int htw_id = 24;
+        LocalDate heute = LocalDate.now();
+
+        Menu m = null;// = new Menu();
+
+        boolean result = true;
+        try {
+            Canteen htw = testAPI.getCanteenById(htw_id);
+            m = testAPI.getMenuFromCanteenByDate(htw, "29-05-2018");
+        }
+        catch(IOException e){
+
+        }
+
+        for (Meal meal :
+                m.getMeals())
+        {
+            System.out.println(meal.getNotes().toString());
+        }
+
+        assertThat(m.getMeals().size() > 0, is(true));
     }
 
 }

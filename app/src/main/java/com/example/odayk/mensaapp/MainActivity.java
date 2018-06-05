@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity
     MyAdapter adapter;
 
 
-    private OpenMensaAPI openMensaAPI;
+    public OpenMensaAPI openMensaAPI;
 
     public void createOpenMensaAPI() {
         openMensaAPI = new OpenMensaAPI();
@@ -91,11 +91,10 @@ public class MainActivity extends AppCompatActivity
 
         /****************************Implementierung von ExpandableListView*************************/
         expandableListView = (ExpandableListView) findViewById(R.id.idListView);
-        //myHeader = DataProvider.getInfo();
+        myHeader = DataProvider.getInfo();
         // spaeter, wenn gebraucht
-        DataProvider.getTodaysMenu();
-        DataProvider.init();
-
+        //DataProvider.getTodaysMenu();
+        //DataProvider.init();
         myChild = new ArrayList<>(myHeader.keySet());
         adapter = new MyAdapter(this, myHeader, myChild);
         expandableListView.setAdapter(adapter);
@@ -142,32 +141,11 @@ public class MainActivity extends AppCompatActivity
 
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.wilhelminenhof) {
-            try {
-                Canteen canteen24 = openMensaAPI.getCanteenById(24);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            // Toast.makeText(this, "Wilhelminenhof Mensa ausgewählt", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.treskowalle) {
-            try {
-                Canteen canteen30 = openMensaAPI.getCanteenById(30);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //   Toast.makeText(this, "Treskowalle Mensa ausgewählt", Toast.LENGTH_SHORT).show();
-        }
 
-        final LocalDate localDate = LocalDate.now();
         Date date = new Date();
 //        int h = date.getHours();
-
-        DateFormat f = new SimpleDateFormat("dd . MM . yyyy");
-
-        String currentTime = f.format(date);
-
-        // LocalDate localDate = LocalDate.of(2018, 05, 27);
-
+        DateFormat dateFormat = new SimpleDateFormat("dd . MM . yyyy");
+        final String currentDate = dateFormat.format(date);
 
         new Thread(new Runnable() {
             @Override
@@ -175,19 +153,29 @@ public class MainActivity extends AppCompatActivity
                 //noinspection SimplifiableIfStatement
                 if (id == R.id.wilhelminenhof) {
                     try {
-                        Canteen canteen24 = openMensaAPI.getCanteenById(24);
+                        if (openMensaAPI.getDayStatusFromCanteenByDate(24, currentDate).isOpen() == false) {
+                            //Toast.makeText(getApplicationContext(),CanteenClose,Toast.LENGTH_SHORT).show();}
+                            Toast.makeText(MainActivity.this, "mensa ist geschlossen", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Canteen canteen24 = openMensaAPI.getCanteenById(24);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 } else if (id == R.id.treskowalle) {
                     try {
-                        Canteen canteen30 = openMensaAPI.getCanteenById(30);
+                        if (openMensaAPI.getDayStatusFromCanteenByDate(30, currentDate).isOpen() == true) {
+                            //   Toast.makeText(this, "Wilhelminenhof Mensa ausgewählt", Toast.LENGTH_SHORT).show();}
+                            Toast.makeText(MainActivity.this, "mensa ist geschlossen", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Canteen canteen30 = openMensaAPI.getCanteenById(30);
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }
-        });
+        }).start();
         return super.onOptionsItemSelected(item);
 
         //   Toast.makeText(this, "Wilhelminenhof Mensa ausgewählt", Toast.LENGTH_SHORT).show();
@@ -262,7 +250,7 @@ public class MainActivity extends AppCompatActivity
 
 
     /**********************************Implementierung von ExpndableListView***************************************/
-    class  MyAdapter extends BaseExpandableListAdapter {
+    class MyAdapter extends BaseExpandableListAdapter {
         private Context ctx;
         private HashMap<String, List<String>> ChildTitles;
         private List<String> HeaderTitles;
@@ -339,95 +327,125 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-   static class DataProvider {
+    static class DataProvider {
+        public static HashMap<String, List<String>> getInfo() {
 
-        public static OpenMensa.api.model.Menu getTodaysMenu(){
-          if (todayMenuList.isEmpty())  return null; else return todayMenuList.get(0);
-        }
+            Date date = new Date();
+            DateFormat dateFormat = new SimpleDateFormat("dd . MM . yyyy");
+            final String currentDate = dateFormat.format(date);
+            final String date1 = "04.06.2018";
+            HashMap<String, List<String>> HeaderDetails = new HashMap<String, List<String>>();
+            final OpenMensaAPI openMensaAPI = new OpenMensaAPI();
+            final OpenMensa.api.model.Menu menu = new OpenMensa.api.model.Menu();
 
-        private final static List<OpenMensa.api.model.Menu> todayMenuList = new ArrayList<OpenMensa.api.model.Menu>();
 
-        public static void init(){
+            final List<String> ChildDetails1 = new ArrayList<>();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    OpenMensaAPI api = new OpenMensaAPI();
                     try {
-                        OpenMensa.api.model.Menu todaysMenu  = api.temp_getMenuFromCanteenByDate(api.getCanteenById(24),"29-05-2018");
-                        todayMenuList.add(todaysMenu);
+                        ChildDetails1.add(String.valueOf(openMensaAPI.getCanteenById(24).getId()));
+                        ChildDetails1.add(openMensaAPI.getCanteenById(24).getCity());
+                        ChildDetails1.add(openMensaAPI.getCanteenById(24).getName());
+                        ChildDetails1.add(openMensaAPI.getCanteenById(24).getAddress());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-            });
-        }
+            }).start();
 
+            final List<String> ChildDetails2 = new ArrayList<>();
 
-      /*  public static HashMap<String, List<String>> getInfo() {
-
-            final OpenMensa.api.model.Menu todaysMenu;
-
-          new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        OpenMensaAPI api = new OpenMensaAPI();
-                        try {
-                            todaysMenu  = api.temp_getMenuFromCanteenByDate(api.getCanteenById(24),"29-05-2018");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        List<Meal> meals = openMensaAPI.getMenuFromCanteenByDate(24, currentDate).getMeals();
+                        Canteen canteen = openMensaAPI.getCanteenById(30);
+                        ChildDetails2.add(canteen.getName());
+                        ChildDetails2.add(String.valueOf(canteen.getId()));
+                        ChildDetails2.add(canteen.getCity());
+                        ChildDetails2.add(canteen.getName());
+                        ChildDetails2.add(canteen.getAddress());
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-          });*/
+                }
+            }).start();
 
- //       MealWrapper today = new MealWrapper(todaysMenu);
- //       return today.getMealMap();
-/*
-        HashMap<String, List<String>> HeaderDetails = new HashMap<String, List<String>>();
-        List<String> ChildDetails1 = new ArrayList<>();
-        ChildDetails1.add("This is Children 11");
-        ChildDetails1.add("This is Children 12");
-        ChildDetails1.add("This is Children 13");
-        ChildDetails1.add("This is Children 14");
+            final List<String> ChildDetails3 = new ArrayList<>();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        final List<Meal> meals = openMensaAPI.getMenuFromCanteenByDate(24, currentDate).getMeals();
+                        if (meals != null) {
+                            for (int i = 0; i < meals.size(); i++) {
+                                ChildDetails3.add(meals.get(i).getName());
+                            }
+                        } else {
+                            ChildDetails3.add("List is empty");
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
 
-        List<String> ChildDetails2 = new ArrayList<>();
-        ChildDetails2.add("This is Children 21");
-        ChildDetails2.add("This is Children 22");
-        ChildDetails2.add("This is Children 23");
-        ChildDetails2.add("This is Children 24");
 
-        List<String> ChildDetails3 = new ArrayList<>();
-        ChildDetails3.add("This is Children 31");
-        ChildDetails3.add("This is Children 32");
-        ChildDetails3.add("This is Children 33");
-        ChildDetails3.add("This is Children 34");
 
-        List<String> ChildDetails4 = new ArrayList<>();
-        ChildDetails4.add("This is Children 41");
-        ChildDetails4.add("This is Children 42");
-        ChildDetails4.add("This is Children 43");
-        ChildDetails4.add("This is Children 44");
 
-        List<String> ChildDetails5 = new ArrayList<>();
-        ChildDetails5.add("This is Children 51");
-        ChildDetails5.add("This is Children 52");
-        ChildDetails5.add("This is Children 53");
-        ChildDetails5.add("This is Children 54");
 
-        List<String> ChildDetails6 = new ArrayList<>();
-        ChildDetails6.add("This is Children 61");
-        ChildDetails6.add("This is Children 62");
-        ChildDetails6.add("This is Children 63");
-        ChildDetails6.add("This is Children 64");
+        /*    final List<String> ChildDetails3 = new ArrayList<>();
+                    try {
+                        final List<Meal> meals = openMensaAPI.getMenuFromCanteenByDate(24, currentDate).getMeals();
+                        if (meals != null) {
+                            for (int i = 0; i < meals.size(); i++) {
+                                ChildDetails3.add(meals.get(i).getName());
+                            }
+                        } else {
+                            ChildDetails3.add("List is empty");
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }*/
 
-        HeaderDetails.put("Header 1", ChildDetails1);
-        HeaderDetails.put("Header 2", ChildDetails2);
-        HeaderDetails.put("Header 3", ChildDetails3);
-        HeaderDetails.put("Header 4", ChildDetails4);
-        HeaderDetails.put("Header 5", ChildDetails5);
-        HeaderDetails.put("Header 6", ChildDetails6);
 
-        return HeaderDetails;*/
-            //   }
+
+/*           List<String> ChildDetails3 = new ArrayList<>();
+            ChildDetails3.add("This is Children 31");
+            ChildDetails3.add("This is Children 32");
+            ChildDetails3.add("This is Children 33");
+            ChildDetails3.add("This is Children 34");*/
+
+            List<String> ChildDetails4 = new ArrayList<>();
+            ChildDetails4.add("This is Children 41");
+            ChildDetails4.add("This is Children 42");
+            ChildDetails4.add("This is Children 43");
+            ChildDetails4.add("This is Children 44");
+
+            List<String> ChildDetails5 = new ArrayList<>();
+            ChildDetails5.add("This is Children 51");
+            ChildDetails5.add("This is Children 52");
+            ChildDetails5.add("This is Children 53");
+            ChildDetails5.add("This is Children 54");
+
+            List<String> ChildDetails6 = new ArrayList<>();
+            ChildDetails6.add("This is Children 61");
+            ChildDetails6.add("This is Children 62");
+            ChildDetails6.add("This is Children 63");
+            ChildDetails6.add("This is Children 64");
+
+            HeaderDetails.put("Header 1", ChildDetails1);
+            HeaderDetails.put("Header 2", ChildDetails2);
+            HeaderDetails.put("Header 3", ChildDetails3);
+            HeaderDetails.put("Header 4", ChildDetails4);
+            HeaderDetails.put("Header 5", ChildDetails5);
+            HeaderDetails.put("Header 6", ChildDetails6);
+
+            return HeaderDetails;
         }
+    }
 
 }
+

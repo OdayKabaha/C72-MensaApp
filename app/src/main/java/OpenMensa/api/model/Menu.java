@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Menu {
 
-    private LocalDate date;
+    private String date; // String date statt Localdate lokaldate
     private Canteen canteen;
     private DayStatus status;
     private List<Meal> meals;
@@ -19,14 +19,14 @@ public class Menu {
         this.status = status;
     }
 
-    public LocalDate getDate() {
+    public String getDate() { // String  statt Localdate
         Date d;
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
-    }
+    } // String date statt Localdate lokaldate
 
     public Canteen getCanteen() {
         return canteen;
@@ -55,6 +55,10 @@ public class Menu {
         }
         return s;
     }
+
+    public List<Meal> meals1 = getMeals();
+
+
 
 
 }
