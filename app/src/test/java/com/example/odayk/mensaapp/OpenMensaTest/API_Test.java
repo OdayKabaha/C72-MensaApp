@@ -234,6 +234,32 @@ public class API_Test {
     assertThat(result, notNullValue());
 }
 
+    @Test
+    public void testMenuToday() {
+        int htw_id = 24;
+        LocalDate heute = LocalDate.now();
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        final String currentDate = dateFormat.format(date);
+        System.out.println(currentDate);
+        Menu m = null;// = new Menu();
+
+        boolean result = true;
+        try {
+            Canteen htw = testAPI.getCanteenById(htw_id);
+            m = testAPI.getMenuFromCanteenByDate(htw, currentDate);
+        }
+        catch(IOException e){
+
+        }
+
+        for (Meal meal : m.getMeals())
+        {
+            System.out.println(meal.getNotes().toString());
+        }
+
+        assertThat(m.getMeals().size() > 0, is(true));
+    }
 
 
     @Test
@@ -246,7 +272,7 @@ public class API_Test {
         boolean result = true;
         try {
             Canteen htw = testAPI.getCanteenById(htw_id);
-            m = testAPI.getMenuFromCanteenByDate(htw, "29-05-2018");
+            m = testAPI.getMenuFromCanteenByDate(htw, "19-06-2018");
         }
         catch(IOException e){
 

@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" /> //Internet Permission
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="com.android.permission.SET_ALARM"/> //for Notifications
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,6 +29,9 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".Alarmlist" />
         <activity android:name=".Settings" />
+
+        <receiver android:name=".Notification_reciever"/> // for Notifications function
+
     </application>
 
 </manifest>
