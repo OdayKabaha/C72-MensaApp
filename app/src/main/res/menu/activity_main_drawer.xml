@@ -16,6 +16,10 @@
             android:id="@+id/nav_third_layout"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="Allgemein" />
+        <item
+            android:id="@+id/nav_fourth_layout"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Filter" />
 
 
 

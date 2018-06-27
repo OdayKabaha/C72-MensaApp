@@ -8,4 +8,33 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">MensaApp</string>
+    <string-array name="allergie">
+        <item>Glutenhaltiges</item>
+        <item>Milsch</item>
+        <item>Eier</item>
+        <item>Gestreide</item>
+        <item>Krebstiere</item>
+        <item>Soja</item>
+    </string-array>
+    <string-array name="preis">
+        <item>1€</item>
+        <item>2€</item>
+        <item>3€</item>
+        <item>4€</item>
+        <item>5€</item>
+        <item>6€</item>
+        <item>7€</item>
+        <item>8€</item>
+    </string-array>
+    <string-array name="meal">
+        <item>@drawable/bolognese</item>
+        <item>@drawable/carbonara</item>
+        <item>@drawable/chili_con_carne</item>
+        <item>@drawable/gulasch</item>
+        <item>@drawable/nackensteak</item>
+        <item>@drawable/wok</item>
+        <item>@drawable/tonno</item>
+        <item>@drawable/currywurst</item>
+        <item>@drawable/bouletten</item>
+    </string-array>
 </resources>

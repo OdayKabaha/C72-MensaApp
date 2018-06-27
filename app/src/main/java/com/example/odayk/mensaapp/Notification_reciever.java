@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
 public class Notification_reciever extends BroadcastReceiver{
-
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

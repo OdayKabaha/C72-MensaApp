@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
@@ -7,6 +8,40 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.darwindeveloper.horizontalscrollmenulibrary.custom_views.HorizontalScrollMenuView
+            android:id="@+id/menu"
+            android:layout_width="match_parent"
+            android:layout_height="128dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="49dp"
+            android:background="#ffffff"
+            app:icon_height="70dp"
+            app:icon_width="70dp"
+            app:item_marginBottom="4dp"
+            app:item_marginLeft="4dp"
+            app:item_marginRight="4dp"
+            app:item_marginTop="4dp"
+            app:item_textSize="7dp">
+        </com.darwindeveloper.horizontalscrollmenulibrary.custom_views.HorizontalScrollMenuView>
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycleview_Speiseplan"
+            android:layout_width="380dp"
+            android:layout_height="470dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true">
+        </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
 
     <include
         layout="@layout/app_bar_main"
@@ -21,8 +56,6 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" >
-
-
     </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

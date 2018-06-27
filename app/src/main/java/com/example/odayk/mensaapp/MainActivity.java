@@ -1,17 +1,13 @@
 package com.example.odayk.mensaapp;
 
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,115 +16,80 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
+import com.darwindeveloper.horizontalscrollmenulibrary.custom_views.HorizontalScrollMenuView;
+import com.example.odayk.mensaapp.FilterFunktion.FilterFunktion;
+import com.example.odayk.mensaapp.mainpage.RecyclerViewAdapter;
 
 import java.text.DateFormat;
-import java.time.LocalDate;
-import java.util.Date;
-
 import java.text.SimpleDateFormat;
-import java.time.Clock;
-import java.time.LocalDate;
-
-
-import OpenMensa.api.OpenMensaAPI;
-import OpenMensa.api.helpers.MealWrapper;
-import OpenMensa.api.model.*;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
+
+import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import OpenMensa.api.OpenMensaAPI;
+import OpenMensa.api.model.*;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
+    private static final String TAG = MainActivity.class.getSimpleName();
+    //vars
+    private ArrayList<String> mNames = new ArrayList<>();
+    private ArrayList<String> mImageUrls = new ArrayList<>();
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+    //Horizontal Scroll View
+    HorizontalScrollMenuView menu;
+    TextView textView;
 
-    HashMap<String, List<String>> myHeader;
-    List<String> myChild;
-    ExpandableListView expandableListView;
-    MyAdapter adapter;
-
-
-    public OpenMensaAPI openMensaAPI;
-
-    public void createOpenMensaAPI() {
-        openMensaAPI = new OpenMensaAPI();
+    OpenMensaAPI openMensaAPI = new OpenMensaAPI();
+    public void setOpenMensaAPI(OpenMensaAPI openMensaAPI) {
+        this.openMensaAPI = new OpenMensaAPI();
     }
-
-
     public Canteen printCanteen(int i) throws IOException {
         return openMensaAPI.getCanteenById(30);
         // System.out.println("gut");
     }
-
     String printMealsFromHtw() throws IOException {
         return openMensaAPI.getSomeMealsFromHTW();
     }
 
-    String CanteenClose = "Heute ist die Mensa geschlossen!";
-
-
-    private static final String TAG =
-            MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { //Verbindet das Layout der Activity mit der java-Datei
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate() entered");
 
-        setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /****************************Implementierung von ExpandableListView*************************/
-        expandableListView = (ExpandableListView) findViewById(R.id.idListView);
-        myHeader = DataProvider.getInfo();
-        myChild = new ArrayList<>(myHeader.keySet());
-        adapter = new MyAdapter(this, myHeader, myChild);
-        expandableListView.setAdapter(adapter);
-        /********************************************************************************************/
+        initImageBitmaps();
+
+        //Horizontal menu
+        menu = (HorizontalScrollMenuView) findViewById(R.id.menu);
+        textView = (TextView) findViewById(R.id.textView);
+
+        initmenu();
 
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        createOpenMensaAPI();
-
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -143,114 +104,150 @@ public class MainActivity extends AppCompatActivity
         return super.onCreateOptionsMenu(campus);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        final int id = item.getItemId();
+
+        int id = item.getItemId();
 
 
         //noinspection SimplifiableIfStatement
+        if (id == R.id.wilhelminenhof) {
+            try {
+                setOpenMensaAPI(openMensaAPI);
+                Canteen canteen24 = openMensaAPI.getCanteenById(24);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // Toast.makeText(this, "Wilhelminenhof Mensa ausgewählt", Toast.LENGTH_SHORT).show();
+        }else if (id == R.id.treskowalle) {
+            try {
+                Canteen canteen30 = openMensaAPI.getCanteenById(30);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //   Toast.makeText(this, "Treskowalle Mensa ausgewählt", Toast.LENGTH_SHORT).show();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    private void initmenu(){
+        menu.addItem("Montag", R.drawable.montag);
+        menu.addItem("Dienstag", R.drawable.dienstag);
+        menu.addItem("Mittwoch", R.drawable.mittwoch);
+        menu.addItem("Donnerstag", R.drawable.donnerstag);
+        menu.addItem("Freitag", R.drawable.freitag);
+        menu.addItem("Samstag", R.drawable.samstag);
+        menu.addItem("Sonntag", R.drawable.sonntag);
+
+        menu.setOnHSMenuClickListener(new HorizontalScrollMenuView.OnHSMenuClickListener() {
+            @Override
+            public void onHSMClick(com.darwindeveloper.horizontalscrollmenulibrary.extras.MenuItem menuItem, int position) {
+                Toast.makeText(MainActivity.this,""+menuItem.getText(),Toast.LENGTH_SHORT).show();
+                textView.setText(menuItem.getText());
+            }
+        });
+    }
+    private void initImageBitmaps(){
 
         Date date = new Date();
-//        int h = date.getHours();
-        DateFormat dateFormat = new SimpleDateFormat("dd . MM . yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         final String currentDate = dateFormat.format(date);
+     /*
+        OpenMensaAPI api = new OpenMensaAPI();
+
+        Canteen HTW = null;
+        try {
+            HTW = api.getCanteenById(24);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        HTW.getName(); // HTW BERLIN
+        HTW.getCity();
+
+        Date heute = new Date("24-05-2018");
+
+        Menu heuteMEnu = null;
+        try {
+            heuteMEnu = api.getMenuFromCanteenByDate(24,heute);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        heuteMEnu.
+
+        HTW.getName(); // HTW BERLIN
+        HTW.getCity();
+*/
+
+        Log.d(TAG, "initImageBitmaps: preparing bitmaps.");
+        mImageUrls=new ArrayList<>();
 
         new Thread(new Runnable() {
+            List<Meal> mealsLokal = new ArrayList<>();
             @Override
             public void run() {
-                //noinspection SimplifiableIfStatement
-                if (id == R.id.wilhelminenhof) {
-                    try {
-                        if (openMensaAPI.getDayStatusFromCanteenByDate(24, currentDate).isOpen() == false) {
-                            //Toast.makeText(getApplicationContext(),CanteenClose,Toast.LENGTH_SHORT).show();}
-                            Toast.makeText(MainActivity.this, "mensa ist geschlossen", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Canteen canteen24 = openMensaAPI.getCanteenById(24);
+                try {
+                    final List<Meal> meals = openMensaAPI.getMenuFromCanteenByDate(24, currentDate).getMeals();
+                    if (meals != null) {
+                        for (Meal meal : meals){
+                            mImageUrls.add("https://ctcdn.azureedge.net/cloudcache/3/7/d/2/e/4/37d2e4e679e2b59cee8d23f6dbd3fd745c376458.jpg");
+                            mNames.add(meal.getName());
+                            mealsLokal.add(meal);
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } else {
+                        mImageUrls.add("https://ctcdn.azureedge.net/cloudcache/3/7/d/2/e/4/37d2e4e679e2b59cee8d23f6dbd3fd745c376458.jpg");
+                        mNames.add("Curry Wurst");
                     }
-                } else if (id == R.id.treskowalle) {
-                    try {
-                        if (openMensaAPI.getDayStatusFromCanteenByDate(30, currentDate).isOpen() == true) {
-                            //   Toast.makeText(this, "Wilhelminenhof Mensa ausgewählt", Toast.LENGTH_SHORT).show();}
-                            Toast.makeText(MainActivity.this, "mensa ist geschlossen", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Canteen canteen30 = openMensaAPI.getCanteenById(30);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }).start();
-        return super.onOptionsItemSelected(item);
+        initRecyclerView();
 
-        //   Toast.makeText(this, "Wilhelminenhof Mensa ausgewählt", Toast.LENGTH_SHORT).show();
-        //  Toast.makeText(this, "Treskowalle Mensa ausgewählt", Toast.LENGTH_SHORT).show();
     }
 
+    private void initRecyclerView(){
+        Log.d(TAG, "initRecyclerView: init recyclerview.");
+        RecyclerView recyclerView = findViewById(R.id.recycleview_Speiseplan);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mNames, mImageUrls);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    //*********************************************************************//
-        /*
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //noinspection SimplifiableIfStatement
-                if (id == R.id.wilhelminenhof) {
-                    try {
-                        if(openMensaAPI.getDayStatusFromCanteenByDate(24,localDate ).isOpen() == false){
-                            Toast.makeText(getApplicationContext(),CanteenClose,Toast.LENGTH_SHORT).show();}
-                        else {
-                            try {
-
-                                Canteen canteen24 = openMensaAPI.getCanteenById(24);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    //   Toast.makeText(this, "Wilhelminenhof Mensa ausgewählt", Toast.LENGTH_SHORT).show();
-                }else if (id == R.id.treskowalle) {
-                    try {
-                        Canteen canteen30 = openMensaAPI.getCanteenById(30);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                  //  Toast.makeText(this, "Treskowalle Mensa ausgewählt", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-         */
-
-    //****************************************************************//
-
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(this, layoutManager.getOrientation());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(itemDecoration);
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
         if (id == R.id.nav_first_layout) {
-            Log.d(TAG, "first selected");
-            Log.d(TAG, "third selected");
+            Log.d(TAG,"first selected");
             Intent intent = new Intent(this, Alarmlist.class);
             startActivity(intent);
+            this.finish();
         } else if (id == R.id.nav_second_layout) {
-            Log.d(TAG, "second selected");
+            Log.d(TAG,"second selected");
             Intent intent = new Intent(this, Graph.class);
             startActivity(intent);
+            this.finish();
         } else if (id == R.id.nav_third_layout) {
-            Log.d(TAG, "third selected");
+            Log.d(TAG,"third selected");
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
+            this.finish();
+        } else if (id == R.id.nav_fourth_layout) {
+            Log.d(TAG,"fourth selected");
+            Intent intent = new Intent(this, FilterFunktion.class);
+            startActivity(intent);
+            this.finish();
         } else if (id == R.id.nav_send) {
 
         }
@@ -259,5 +256,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-}
 
+}
