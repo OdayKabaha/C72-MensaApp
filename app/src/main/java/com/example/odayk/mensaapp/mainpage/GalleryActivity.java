@@ -108,16 +108,15 @@ public class GalleryActivity extends AppCompatActivity {
                         {
                             publishProgress("Kategorie: " + meal.getCategory().toString());
                             publishProgress("Preise:");
-                            publishProgress("Studenten: " + String.valueOf(meal.getPrices().getStudent()));
-                            publishProgress("Mitarbeiter: " + String.valueOf(meal.getPrices().getEmployee()));
-                            publishProgress("Andere: " + String.valueOf(meal.getPrices().getOther()));
+                            publishProgress("   Studenten: " + String.valueOf(meal.getPrices().getStudent()));
+                            publishProgress("   Mitarbeiter: " + String.valueOf(meal.getPrices().getEmployee()));
+                            publishProgress("   Andere: " + String.valueOf(meal.getPrices().getOther()));
                             publishProgress("Zutaten:");
                             for(i=0 ; i < meal.getNotes().size() ; i++)
                             {
                                 publishProgress("   " + meal.getNotes().get(i));
                             }
                         }
-
                     }
                 }
             } catch (IOException e) {
@@ -137,6 +136,4 @@ public class GalleryActivity extends AppCompatActivity {
             //Toast.makeText(getApplicationContext(),result,Toast.LENGTH_LONG).show();
         }
     }
-
-
 }

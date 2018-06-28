@@ -2,6 +2,7 @@ package com.example.odayk.mensaapp;
 
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DividerItemDecoration;
@@ -36,6 +37,9 @@ import OpenMensa.api.model.*;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    Date date = new Date();
+    DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    final String currentDate = dateFormat.format(date);
 
     private static final String TAG = MainActivity.class.getSimpleName();
     //vars
@@ -47,17 +51,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView textView;
 
     OpenMensaAPI openMensaAPI = new OpenMensaAPI();
-    public void setOpenMensaAPI(OpenMensaAPI openMensaAPI) {
-        this.openMensaAPI = new OpenMensaAPI();
-    }
-    public Canteen printCanteen(int i) throws IOException {
-        return openMensaAPI.getCanteenById(30);
-        // System.out.println("gut");
-    }
-    String printMealsFromHtw() throws IOException {
-        return openMensaAPI.getSomeMealsFromHTW();
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { //Verbindet das Layout der Activity mit der java-Datei
@@ -108,28 +101,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.wilhelminenhof) {
-            try {
-                setOpenMensaAPI(openMensaAPI);
-                Canteen canteen24 = openMensaAPI.getCanteenById(24);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            // Toast.makeText(this, "Wilhelminenhof Mensa ausgewählt", Toast.LENGTH_SHORT).show();
-        }else if (id == R.id.treskowalle) {
-            try {
-                Canteen canteen30 = openMensaAPI.getCanteenById(30);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //   Toast.makeText(this, "Treskowalle Mensa ausgewählt", Toast.LENGTH_SHORT).show();
-        }
+        }else if (id == R.id.treskowalle) { }
 
         return super.onOptionsItemSelected(item);
     }
+
     private void initmenu(){
         menu.addItem("Montag", R.drawable.montag);
         menu.addItem("Dienstag", R.drawable.dienstag);
@@ -147,65 +125,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
+
     private void initImageBitmaps(){
-
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        final String currentDate = dateFormat.format(date);
-     /*
-        OpenMensaAPI api = new OpenMensaAPI();
-
-        Canteen HTW = null;
-        try {
-            HTW = api.getCanteenById(24);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        HTW.getName(); // HTW BERLIN
-        HTW.getCity();
-
-        Date heute = new Date("24-05-2018");
-
-        Menu heuteMEnu = null;
-        try {
-            heuteMEnu = api.getMenuFromCanteenByDate(24,heute);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        heuteMEnu.
-
-        HTW.getName(); // HTW BERLIN
-        HTW.getCity();
-*/
-
         Log.d(TAG, "initImageBitmaps: preparing bitmaps.");
         mImageUrls=new ArrayList<>();
+        mealNameHolder();
+        initRecyclerView();
+    }
 
+    public void mealNameHolder(){
         new Thread(new Runnable() {
-            List<Meal> mealsLokal = new ArrayList<>();
             @Override
             public void run() {
                 try {
                     final List<Meal> meals = openMensaAPI.getMenuFromCanteenByDate(24, currentDate).getMeals();
                     if (meals != null) {
-                        for (Meal meal : meals){
+                        for (Meal meal : meals) {
                             mImageUrls.add("https://ctcdn.azureedge.net/cloudcache/3/7/d/2/e/4/37d2e4e679e2b59cee8d23f6dbd3fd745c376458.jpg");
                             mNames.add(meal.getName());
-                            mealsLokal.add(meal);
                         }
-                    } else {
-                        mImageUrls.add("https://ctcdn.azureedge.net/cloudcache/3/7/d/2/e/4/37d2e4e679e2b59cee8d23f6dbd3fd745c376458.jpg");
-                        mNames.add("Curry Wurst");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }).start();
-        initRecyclerView();
-
     }
 
     private void initRecyclerView(){
@@ -232,22 +176,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d(TAG,"first selected");
             Intent intent = new Intent(this, Alarmlist.class);
             startActivity(intent);
-            this.finish();
         } else if (id == R.id.nav_second_layout) {
             Log.d(TAG,"second selected");
             Intent intent = new Intent(this, Graph.class);
             startActivity(intent);
-            this.finish();
         } else if (id == R.id.nav_third_layout) {
             Log.d(TAG,"third selected");
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
-            this.finish();
         } else if (id == R.id.nav_fourth_layout) {
             Log.d(TAG,"fourth selected");
             Intent intent = new Intent(this, FilterFunktion.class);
             startActivity(intent);
-            this.finish();
         } else if (id == R.id.nav_send) {
 
         }
