@@ -13,6 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+        
         <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,6 +37,11 @@
         <activity android:name=".FilterFunktion.FilterFunktion"
             android:windowSoftInputMode="adjustPan"/>
         <receiver android:name=".Notification_reciever"/> // for Notifications function
+        
+        <provider
+            android:authorities="com.facebook.app.FacebookContentProvider2064583227126646"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
 
     </application>
 

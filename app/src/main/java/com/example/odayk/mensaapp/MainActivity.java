@@ -2,12 +2,15 @@ package com.example.odayk.mensaapp;
 
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,7 +26,16 @@ import android.widget.Toast;
 import com.darwindeveloper.horizontalscrollmenulibrary.custom_views.HorizontalScrollMenuView;
 import com.example.odayk.mensaapp.FilterFunktion.FilterFunktion;
 import com.example.odayk.mensaapp.mainpage.RecyclerViewAdapter;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +53,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     final String currentDate = dateFormat.format(date);
 
+    CallbackManager callbackManager;
+    ShareDialog shareDialog;
+
     private static final String TAG = MainActivity.class.getSimpleName();
     //vars
     private ArrayList<String> mNames = new ArrayList<>();
@@ -56,6 +71,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) { //Verbindet das Layout der Activity mit der java-Datei
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
+        printKeyHash();
+        //Init FB
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(this);
+
         Log.d(TAG, "onCreate() entered");
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -187,13 +209,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d(TAG,"fourth selected");
             Intent intent = new Intent(this, FilterFunktion.class);
             startActivity(intent);
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_share) {
+            //Create Callback
+            shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+                @Override
+                public void onSuccess(Sharer.Result result) {
+                    Toast.makeText(MainActivity.this, "Share successful!", Toast.LENGTH_SHORT).show();
+                }
 
+                @Override
+                public void onCancel() {
+                    Toast.makeText(MainActivity.this, "Share cancel!", Toast.LENGTH_SHORT).show();
+
+                }
+
+                @Override
+                public void onError(FacebookException error) {
+                    Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+
+                }
+            });
+            ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                    .setQuote("Lädt die MensaApp schnell herunter und habt einen besseren Überblick über die Speisen.")
+                    .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.youtube"))
+                    .build();
+            if (ShareDialog.canShow(ShareLinkContent.class)){
+                shareDialog.show(linkContent);
+            }
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    // SHA-1 key connverted to Base 64
+    private void printKeyHash(){
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo("com.example.odayk.androidfbshare", PackageManager.GET_SIGNATURES);
+            for (android.content.pm.Signature signature : info.signatures){
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash", Base64.encodeToString(md.digest(),Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
 }
